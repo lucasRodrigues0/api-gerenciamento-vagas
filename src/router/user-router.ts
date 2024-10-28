@@ -1,14 +1,6 @@
-import express, { NextFunction, Request, Response } from 'express';
-import { userRepository } from '../repository/userRepository';
-import { UserType } from '../types/user';
+import express from 'express';
+import { getUsers } from '../controller/user-controller';
 
 export const userRouter = express.Router();
 
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-
-    const users: UserType[]= await userRepository.find({where: {
-        "tipo": 1
-    }});
-
-    res.status(200).json(users);
-});
+userRouter.get('/', getUsers); //here is the issue
