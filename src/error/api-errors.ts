@@ -7,3 +7,10 @@ export abstract class CustomError extends Error {
         this.statusCode = statusCode;
     }
 }
+
+export class BadRequestError extends CustomError {
+    constructor(message: string) {
+        super(message, 400);
+    
+    }
+}
