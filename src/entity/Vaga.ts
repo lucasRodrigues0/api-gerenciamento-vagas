@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { fase } from "./enum/Fase";
+import { Fase } from "./enum/Fase";
 import { Usuario } from "./Usuario";
 import { Candidatura } from "./Candidatura";
 
@@ -14,9 +14,9 @@ export class Vaga {
     descricao: string;
     @Column({
         type: "enum",
-        enum: fase
+        enum: Fase
     })
-    fase: fase; //enum fase
+    fase: Fase; //enum fase
     @Column()
     abertura: Date;
     @Column()

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
-import { UserType } from "../types/user";
+import { UserType } from "../types/UserType";
 import bcrypt from 'bcrypt';
 import { BadRequestError } from "../error/api-errors";
 

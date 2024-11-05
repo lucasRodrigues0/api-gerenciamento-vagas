@@ -12,7 +12,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
         const { vagas, senha, habilidades, candidaturas, ...rest } = user;
         if(user.tipo === TipoUsuario.CANDIDATO) {
 
-            let listaHabilidades = habilidades.map(({nome}) =>  nome); //ver se tem como fazer essa lógica sem isso 
+            let listaHabilidades = habilidades.map(({nome}) =>  nome);
 
             return {...rest, listaHabilidades, candidaturas};
         }
@@ -21,6 +21,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
             return {...rest, vagas};
         }
 
+        //user.tipo === TipoUsuario.ADMIN
         return {...rest};
 
     });
