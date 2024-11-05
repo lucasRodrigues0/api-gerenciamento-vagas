@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { TipoUsuario } from "./enum/enum-tipo";
+import { TipoUsuario } from "./enum/TipoUsuario";
 import { Vaga } from "./Vaga";
 import { Habilidade } from "./Habilidade";
 import { Candidatura } from "./Candidatura";

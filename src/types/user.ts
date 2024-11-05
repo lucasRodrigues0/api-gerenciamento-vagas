@@ -1,5 +1,5 @@
 import { Candidatura } from "../entity/Candidatura"
-import { TipoUsuario } from "../entity/enum/enum-tipo"
+import { TipoUsuario } from "../entity/enum/TipoUsuario"
 import { Habilidade } from "../entity/Habilidade"
 import { Vaga } from "../entity/Vaga"
 

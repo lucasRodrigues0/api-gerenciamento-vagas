@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { fase } from "./enum/enum-fase";
+import { fase } from "./enum/Fase";
 import { Usuario } from "./Usuario";
 import { Candidatura } from "./Candidatura";
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
+import { TipoUsuario } from "../entity/enum/TipoUsuario";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -9,14 +10,14 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 
     const filteredUsers = users.map(user => {
         const { vagas, senha, habilidades, candidaturas, ...rest } = user;
-        if(user.tipo === 1) {
+        if(user.tipo === TipoUsuario.CANDIDATO) {
 
             let listaHabilidades = habilidades.map(({nome}) =>  nome); //ver se tem como fazer essa lógica sem isso 
 
             return {...rest, listaHabilidades, candidaturas};
         }
 
-        if(user.tipo === 2) {
+        if(user.tipo === TipoUsuario.RECRUTADOR) {
             return {...rest, vagas};
         }
 
