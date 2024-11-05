@@ -36,3 +36,25 @@ export const createVaga = async (req: Request, res: Response, next: NextFunction
     res.status(201).json({vaga});
 
 }
+
+export const getVagas = async (req: Request, res: Response, next: NextFunction) => {
+
+    const vagas: Vaga[] = await vagaRepository.find({
+        relations: ["abertaPor","candidaturas"]
+    });
+
+    const filteredVagas = vagas.map(vaga => {
+        const {abertaPor, ...rest} = vaga;
+
+        const responsavel: UserType = {
+            nome: abertaPor.nome,
+            email: abertaPor.email,
+            tipo: abertaPor.tipo
+        };
+
+        return {...rest, responsavel};
+    })
+
+    res.status(200).json(filteredVagas);
+
+}
