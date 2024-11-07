@@ -6,8 +6,12 @@ import { vagaRepository } from "../repository/vagaRepository";
 import { Fase } from "../entity/enum/Fase";
 import { userRepository } from "../repository/userRepository";
 import { UserType } from "../types/UserType";
-import { Candidatura } from "../entity/Candidatura";
 import { Like } from "typeorm";
+
+const formatTitle = (str: string) => {
+    const aux = str.split(' ');
+    return aux[0].charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
 export const createVaga = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -27,7 +31,7 @@ export const createVaga = async (req: Request, res: Response, next: NextFunction
     }
 
     const vaga = new Vaga();
-    vaga.titulo = titulo;
+    vaga.titulo = formatTitle(titulo);
     vaga.descricao = descricao;
     vaga.fase = Fase.ABERTA;
     // vaga.abertura = Date.now();
