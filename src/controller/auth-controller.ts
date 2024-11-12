@@ -6,31 +6,31 @@ import { BadRequestError } from "../error/api-errors";
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { nome, email, senha, confSenha, tipo } = req.body;
+    const { name, email, password, confPassword, type } = req.body;
 
     const existingUser = await userRepository.find({ where: {
         email: email
     }});
 
     if(existingUser.length > 0) {
-        throw new BadRequestError('Usuário já existe');
+        throw new BadRequestError('User already registered');
     }
 
-    if(senha !== confSenha) {
-        throw new BadRequestError('Senhas não coincidem');
+    if(password !== confPassword) {
+        throw new BadRequestError('Passwords dont match');
     }
 
     const newUser: UserType = {
-        nome,
+        name,
         email,
-        senha: await bcrypt.hash(senha, 10),
-        tipo
+        password: await bcrypt.hash(password, 10),
+        type
     }
 
     userRepository.save(newUser);
 
     const response = {
-        nome,
+        name,
         email
     }
 

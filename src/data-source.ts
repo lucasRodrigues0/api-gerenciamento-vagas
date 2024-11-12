@@ -15,8 +15,8 @@ export const AppDataSource = new DataSource({
 export const connect = async () => {
     try {
         await AppDataSource.initialize();
-        console.log('banco conectado!');
+        console.log('database connected successfully!');
     } catch (error) {
-        console.error('algo deu errado');
+        console.error('something went wrong');
     }
 }
