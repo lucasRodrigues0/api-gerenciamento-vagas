@@ -1,14 +1,14 @@
-import { Candidatura } from "../entity/Candidatura"
-import { TipoUsuario } from "../entity/enum/TipoUsuario"
-import { Habilidade } from "../entity/Habilidade"
-import { Vaga } from "../entity/Vaga"
+import { Application } from "../entity/Application"
+import { UserTypeEnum } from "../entity/enum/UserTypeEnum"
+import { Skill } from "../entity/Skill"
+import { Job } from "../entity/Job"
 
 export type UserType = {
-    nome: string,
+    name: string,
     email: string,
-    senha?: string,
-    tipo: TipoUsuario,
-    vagas?: Vaga[],
-    habilidades?: Habilidade[],
-    candidaturas?: Candidatura[]
+    password?: string,
+    type: UserTypeEnum,
+    jobs?: Job[],
+    skills?: Skill[],
+    applications?: Application[]
 }

@@ -1,27 +1,29 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
-import { TipoUsuario } from "../entity/enum/TipoUsuario";
+import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 
     const users = await userRepository.find({
-        relations: ["vagas", "habilidades", "candidaturas", "candidaturas.vaga"]
+        relations: ["jobs", "skills", "candidaturas", "candidaturas.job"]
     });
 
     const filteredUsers = users.map(user => {
-        const { vagas, senha, habilidades, candidaturas, ...rest } = user;
-        if(user.tipo === TipoUsuario.CANDIDATO) {
 
-            let listaHabilidades = habilidades.map(({nome}) =>  nome);
+        const { jobs, password, skills, applications, ...rest } = user;
+        
+        if(user.type === UserTypeEnum.CANDIDATE) {
 
-            return {...rest, listaHabilidades, candidaturas};
+            let skillList = skills.map(({name}) =>  name);
+
+            return {...rest, skillList, applications};
         }
 
-        if(user.tipo === TipoUsuario.RECRUTADOR) {
-            return {...rest, vagas};
+        if(user.type === UserTypeEnum.RECRUITER) {
+            return {...rest, jobs};
         }
 
-        //user.tipo === TipoUsuario.ADMIN
+        //user.type === UserTypeEnum.ADMIN
         return {...rest};
 
     });
