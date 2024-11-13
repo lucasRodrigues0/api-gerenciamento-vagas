@@ -4,6 +4,7 @@ import { Skill } from "../entity/Skill"
 import { Job } from "../entity/Job"
 
 export type UserType = {
+    id?: number,
     name: string,
     email: string,
     password?: string,

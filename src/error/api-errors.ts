@@ -15,7 +15,7 @@ export class BadRequestError extends CustomError {
     }
 }
 
-export class UserNotFoundError extends CustomError {
+export class NotFoundError extends CustomError {
     constructor(message: string) {
         super(message, 404);
     

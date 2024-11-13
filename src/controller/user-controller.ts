@@ -5,7 +5,7 @@ import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 
     const users = await userRepository.find({
-        relations: ["jobs", "skills", "candidaturas", "candidaturas.job"]
+        relations: ["jobs", "skills", "applications", "applications.job"]
     });
 
     const filteredUsers = users.map(user => {

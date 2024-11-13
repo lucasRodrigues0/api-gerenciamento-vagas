@@ -1,12 +1,16 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, application } from "express";
 import { Job } from "../entity/Job";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-import { BadRequestError, UserNotFoundError } from "../error/api-errors";
+import { BadRequestError, NotFoundError } from "../error/api-errors";
 import { jobRepository } from "../repository/jobRepository";
 import { Phase } from "../entity/enum/Phase";
 import { userRepository } from "../repository/userRepository";
 import { UserType } from "../types/UserType";
 import { Like } from "typeorm";
+import { AppDataSource } from "../data-source";
+import { Application } from "../entity/Application";
+import { User } from "../entity/User";
+import { applicationRepository } from "../repository/applicationRepository";
 
 const formatTitle = (str: string) => {
     const aux = str.split(' ');
@@ -24,7 +28,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     });
 
     if (!user) {
-        throw new UserNotFoundError('User Not found');
+        throw new NotFoundError('User Not found');
     }
 
     if (user.type !== UserTypeEnum.RECRUITER) {
@@ -40,18 +44,18 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
 
     jobRepository.save(job);
 
-    res.status(201).json({...job});
+    res.status(201).json({ ...job });
 
 }
 
 export const getJobs = async (req: Request, res: Response, next: NextFunction) => {
 
     const jobs: Job[] = await jobRepository.find({
-        relations: ["openBy","applications", "applications.user"]
+        relations: ["openBy", "applications", "applications.user"]
     });
 
     const filteredJobs = jobs.map(job => {
-        const {openBy, applications, ...rest} = job;
+        const { openBy, applications, ...rest } = job;
 
         const _applications = applications.map(item => {
             return {
@@ -68,7 +72,7 @@ export const getJobs = async (req: Request, res: Response, next: NextFunction) =
             email: openBy.email
         };
 
-        return {...rest, responsible, _applications};
+        return { ...rest, responsible, _applications };
     })
 
     res.status(200).json(filteredJobs);
@@ -79,9 +83,80 @@ export const searchJobs = async (req: Request, res: Response, next: NextFunction
 
     const { title } = req.params;
 
-    const list: Job[] = await jobRepository.find({where: {
-        title: Like(`%${title}%`)
-    }});
+    const list: Job[] = await jobRepository.find({
+        where: {
+            title: Like(`%${formatTitle(title)}%`)
+        }, relations: ['applications', 'applications.user']
+    });
+
+    //refatorar essa resposta
 
     res.status(200).json(list);
+}
+
+export const apply = async (req: Request, res: Response, next: NextFunction) => {
+
+    const { userId, jobId } = req.body;
+
+    const user: User | null = await userRepository.findOne({
+        where: {
+            id: userId
+        }
+    });
+
+    if (!user) {
+        throw new NotFoundError('User Not found');
+    }
+
+    if (user.type !== UserTypeEnum.CANDIDATE) {
+        throw new BadRequestError('User not allowed for this operation');
+    }
+
+    const job: Job | null = await jobRepository.findOne({
+        where: {
+            id: jobId
+        }, relations: ['applications', 'applications.user']
+    });
+
+    if (!job) {
+        throw new NotFoundError('Job Not found');
+    }
+
+    job.applications.forEach(application => {
+        if (application.user.name === user.name) {
+            throw new BadRequestError('User already applied for this job');
+        }
+    });
+
+    const application = new Application();
+
+
+    application.user = user,
+        application.job = job
+
+    const response = {
+        candidate: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        },
+        job: {
+            id: job.id,
+            title: job.title,
+            description: job.description,
+        },
+        date: null
+    }
+
+    await applicationRepository.save(application);
+
+    res.status(200).json(response);
+
+    // application.user = user
+    // application.job = job;
+
+    // await AppDataSource.createQueryBuilder().update(Job).set({
+    //     applications: () => applications.push()
+    // }).where('id = :id', {id: jobId})
+
 }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createJob, getJobs, searchJobs } from '../controller/job-controller';
+import { apply, createJob, getJobs, searchJobs } from '../controller/job-controller';
 
 export const jobRouter = express.Router();
 
@@ -8,4 +8,6 @@ jobRouter.post('/', createJob);
 //documentar no swagger
 jobRouter.get('/jobs', getJobs);
 //documentar no swagger
-jobRouter.get('/:titulo', searchJobs);
+jobRouter.get('/:title', searchJobs);
+//documentar no swagger
+jobRouter.post('/apply', apply);
