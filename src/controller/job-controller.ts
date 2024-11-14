@@ -86,10 +86,8 @@ export const searchJobs = async (req: Request, res: Response, next: NextFunction
     const list: Job[] = await jobRepository.find({
         where: {
             title: Like(`%${formatTitle(title)}%`)
-        }, relations: ['applications', 'applications.user']
+        }
     });
-
-    //refatorar essa resposta
 
     res.status(200).json(list);
 }
