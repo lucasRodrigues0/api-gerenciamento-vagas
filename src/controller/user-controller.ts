@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-import { User } from "../entity/User";
-import { UserType } from "../types/UserType";
 import { NotFoundError } from "../error/api-errors";
+import { UserType } from "../types/UserType";
+import { User } from "../entity/User";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 
-    const users = await userRepository.find({
+    const users: User[] = await userRepository.find({
         relations: ["jobs", "skills", "applications", "applications.job"]
     });
 

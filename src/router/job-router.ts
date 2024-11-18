@@ -4,9 +4,9 @@ import { apply, createJob, getJobs, searchJobs } from '../controller/job-control
 export const jobRouter = express.Router();
 
 //documentar no swagger
-jobRouter.post('/', createJob);
+jobRouter.post('/create', createJob);
 //documentar no swagger
-jobRouter.get('/jobs', getJobs);
+jobRouter.get('/all', getJobs);
 //documentar no swagger
 jobRouter.get('/:title', searchJobs);
 //documentar no swagger
