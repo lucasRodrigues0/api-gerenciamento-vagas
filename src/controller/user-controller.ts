@@ -51,11 +51,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
     const { password, jobs, applications, skills, ...rest } = user;
 
-
     let filteredUser = {};
-
-    filteredUser = { ...rest };
-
 
     if (user.type === UserTypeEnum.CANDIDATE) {
         let _skills = skills.map(({ name }) => name);

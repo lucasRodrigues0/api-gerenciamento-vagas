@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, application } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Job } from "../entity/Job";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
 import { BadRequestError, NotFoundError } from "../error/api-errors";
@@ -7,7 +7,6 @@ import { Phase } from "../entity/enum/Phase";
 import { userRepository } from "../repository/userRepository";
 import { UserType } from "../types/UserType";
 import { Like } from "typeorm";
-import { AppDataSource } from "../data-source";
 import { Application } from "../entity/Application";
 import { User } from "../entity/User";
 import { applicationRepository } from "../repository/applicationRepository";
@@ -39,7 +38,6 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.title = formatTitle(title);
     job.description = description;
     job.phase = Phase.OPEN;
-    // job.abertura = Date.now();
     job.openBy = userId;
 
     jobRepository.save(job);
@@ -65,7 +63,7 @@ export const getJobs = async (req: Request, res: Response, next: NextFunction) =
                     email: item.user.email
                 }
             }
-        })
+        });
 
         const responsible = {
             name: openBy.name,
@@ -120,17 +118,14 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
         throw new NotFoundError('Job Not found');
     }
 
-    job.applications.forEach(application => {
-        if (application.user.name === user.name) {
-            throw new BadRequestError('User already applied for this job');
-        }
-    });
+    if (job.applications.filter(name => name.user.name === user.name).length > 0) {
+        throw new BadRequestError('User already applied for this job');
+    }
 
     const application = new Application();
 
-
-    application.user = user,
-        application.job = job
+    application.user = user;
+    application.job = job;
 
     const response = {
         candidate: {
@@ -149,12 +144,5 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     await applicationRepository.save(application);
 
     res.status(200).json(response);
-
-    // application.user = user
-    // application.job = job;
-
-    // await AppDataSource.createQueryBuilder().update(Job).set({
-    //     applications: () => applications.push()
-    // }).where('id = :id', {id: jobId})
 
 }
