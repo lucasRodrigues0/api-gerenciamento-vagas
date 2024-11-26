@@ -43,7 +43,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.location = location;
     job.openBy = userId;
 
-    jobRepository.save(job);
+    await jobRepository.save(job);
 
     res.status(201).json({ ...job });
 

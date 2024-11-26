@@ -6,6 +6,7 @@ import { userRouter } from './router/user-router';
 import { authRouter } from './router/auth-router';
 import { ErrorMiddleware } from './middleware/error-middleware';
 import { jobRouter } from './router/job-router';
+import { skillRouter } from './router/skill-router';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/job', jobRouter);
+app.use('/api/skill', skillRouter);
 app.use(ErrorMiddleware);
 app.listen(port, () => {
     console.log(`working on port: ${port}`);
