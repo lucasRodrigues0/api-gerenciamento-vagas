@@ -18,7 +18,7 @@ const formatTitle = (str: string) => {
 
 export const createJob = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { title, description, userId } = req.body;
+    const { title, description, userId, salary, location, model } = req.body;
 
     const user: UserType | null = await userRepository.findOne({
         where: {
@@ -38,6 +38,9 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.title = formatTitle(title);
     job.description = description;
     job.phase = Phase.OPEN;
+    job.model = model;
+    job.salary = salary;
+    job.location = location;
     job.openBy = userId;
 
     jobRepository.save(job);
