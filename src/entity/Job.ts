@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { Phase } from "./enum/Phase";
 import { User } from "./User";
 import { Application } from "./Application";
+import { Model } from "./enum/Model";
 
 @Entity({name: "tb_job"})
 export class Job {
@@ -17,6 +18,15 @@ export class Job {
         enum: Phase
     })
     phase: Phase; //enum phase
+    @Column({
+        type: "enum",
+        enum: Model
+    })
+    model: Model;
+    @Column()
+    salary: string;
+    @Column()
+    location: string;
     @Column({name: "openingdate"})
     openingDate: Date;
     @Column({name: "closingdate"})
