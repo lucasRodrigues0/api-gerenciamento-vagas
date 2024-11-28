@@ -6,7 +6,7 @@ import { userRepository } from "../repository/userRepository";
 
 export const AuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
-    const token = req.cookies.token;
+    const { token } = req.cookies;
 
     if(!token) {
         throw new UnauthorizedError('Unauthorized');
@@ -25,6 +25,7 @@ export const AuthMiddleware = async (req: Request, res: Response, next: NextFunc
     }
 
     req.user = user;
+
 
     next();
 }

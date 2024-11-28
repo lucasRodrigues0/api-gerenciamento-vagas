@@ -7,6 +7,7 @@ import { authRouter } from './router/auth-router';
 import { ErrorMiddleware } from './middleware/error-middleware';
 import { jobRouter } from './router/job-router';
 import { skillRouter } from './router/skill-router';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -14,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 connect();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
