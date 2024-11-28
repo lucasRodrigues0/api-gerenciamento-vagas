@@ -5,9 +5,14 @@ import { BadRequestError, NotFoundError } from "../error/api-errors";
 import { User } from "../entity/User";
 import { skillRepository } from "../repository/skillRepository";
 import { Skill } from "../entity/Skill";
-import { AppDataSource } from "../data-source";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
+
+    const loggedUser = req.user;
+
+    if(loggedUser.type !== UserTypeEnum.ADMIN) {
+        throw new BadRequestError('User not allowed for this operation');
+    }
 
     const users: User[] = await userRepository.find({
         relations: ["jobs", "skills", "applications", "applications.job"]
@@ -77,11 +82,13 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const addSkill = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { skillId, userId } = req.body;
+    const loggedUser = req.user;
+
+    const { skillId } = req.body;
 
     const user: User | null = await userRepository.findOne({
         where: {
-            id: userId
+            id: loggedUser.id
         },
         relations: ["skills"]
     });
@@ -90,7 +97,7 @@ export const addSkill = async (req: Request, res: Response, next: NextFunction) 
         throw new NotFoundError('User not found');
     }
 
-    if (user.type !== UserTypeEnum.CANDIDATE) {
+    if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
         throw new BadRequestError('User not allowed for this operation');
     }
 

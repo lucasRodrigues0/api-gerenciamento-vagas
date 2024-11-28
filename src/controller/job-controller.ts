@@ -5,7 +5,6 @@ import { BadRequestError, NotFoundError } from "../error/api-errors";
 import { jobRepository } from "../repository/jobRepository";
 import { Phase } from "../entity/enum/Phase";
 import { userRepository } from "../repository/userRepository";
-import { UserType } from "../types/UserType";
 import { Like } from "typeorm";
 import { Application } from "../entity/Application";
 import { User } from "../entity/User";
@@ -18,11 +17,13 @@ const formatTitle = (str: string) => {
 
 export const createJob = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { title, description, userId, salary, location, model } = req.body;
+    const loggedUser = req.user;
 
-    const user: UserType | null = await userRepository.findOne({
+    const { title, description, salary, location, model } = req.body;
+
+    const user: User | null = await userRepository.findOne({
         where: {
-            id: userId
+            id: loggedUser.id
         }
     });
 
@@ -30,7 +31,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
         throw new NotFoundError('User Not found');
     }
 
-    if (user.type !== UserTypeEnum.RECRUITER) {
+    if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new BadRequestError('User not allowed for this operation');
     }
 
@@ -41,10 +42,10 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.model = model;
     job.salary = salary;
     job.location = location;
-    job.openBy = userId;
+    job.openBy = user;
 
     await jobRepository.save(job);
-
+//refatorar o objeto openBy para resposta
     res.status(201).json({ ...job });
 
 }
@@ -95,11 +96,13 @@ export const searchJobs = async (req: Request, res: Response, next: NextFunction
 
 export const apply = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { userId, jobId } = req.body;
+    const loggedUser = req.user;
+
+    const { jobId } = req.body;
 
     const user: User | null = await userRepository.findOne({
         where: {
-            id: userId
+            id: loggedUser.id
         }
     });
 
@@ -107,7 +110,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
         throw new NotFoundError('User Not found');
     }
 
-    if (user.type !== UserTypeEnum.CANDIDATE) {
+    if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
         throw new BadRequestError('User not allowed for this operation');
     }
 
