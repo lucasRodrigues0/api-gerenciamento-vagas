@@ -16,12 +16,22 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
         }
     });
 
+    const skillAlreadyExists: Skill | null = await skillRepository.findOne({
+        where: {
+            name: name
+        }
+    })
+    
     if(!user) {
         throw new NotFoundError('User not found');
     }
-
+    
     if(user.type !== 'admin') {
         throw new BadRequestError('User not allowed for this operation');
+    }
+    
+    if(skillAlreadyExists) {
+        throw new BadRequestError('Skill already registered');
     }
 
     const skill = new Skill();
