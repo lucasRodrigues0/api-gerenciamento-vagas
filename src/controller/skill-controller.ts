@@ -4,15 +4,18 @@ import { Skill } from "../entity/Skill";
 import { userRepository } from "../repository/userRepository";
 import { User } from "../entity/User";
 import { BadRequestError, NotFoundError } from "../error/api-errors";
+import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
 
 
 export const createSkill = async (req: Request, res: Response, next: NextFunction) => {
 
-    const { name, userId } = req.body;
+    const loggedUser = req.user;
+
+    const { name } = req.body;
 
     const user: User | null = await userRepository.findOne({
         where: {
-            id: userId
+            id: loggedUser.id
         }
     });
 
@@ -26,7 +29,7 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
         throw new NotFoundError('User not found');
     }
     
-    if(user.type !== 'admin') {
+    if(loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new BadRequestError('User not allowed for this operation');
     }
     

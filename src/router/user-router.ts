@@ -1,7 +1,6 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import { addSkill, getUser, getUsers } from '../controller/user-controller';
 import { AuthMiddleware } from '../middleware/auth-middleware';
-import { UnauthorizedError } from '../error/api-errors';
 
 export const userRouter = express.Router();
 

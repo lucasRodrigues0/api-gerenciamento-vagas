@@ -1,8 +1,10 @@
 import express from 'express';
 import { apply, createJob, getJobs, searchJobs } from '../controller/job-controller';
+import { AuthMiddleware } from '../middleware/auth-middleware';
 
 export const jobRouter = express.Router();
 
+jobRouter.use(AuthMiddleware);
 //documentar no swagger
 jobRouter.post('/create', createJob);
 //documentar no swagger
