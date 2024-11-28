@@ -31,7 +31,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
         throw new NotFoundError('User Not found');
     }
 
-    if (loggedUser.type !== UserTypeEnum.RECRUITER) {
+    if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new BadRequestError('User not allowed for this operation');
     }
 
