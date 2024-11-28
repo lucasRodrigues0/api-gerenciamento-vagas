@@ -1,15 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-import { NotFoundError } from "../error/api-errors";
+import { BadRequestError, NotFoundError } from "../error/api-errors";
 import { User } from "../entity/User";
+import { skillRepository } from "../repository/skillRepository";
+import { Skill } from "../entity/Skill";
+import { AppDataSource } from "../data-source";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
-    
+
     const users: User[] = await userRepository.find({
         relations: ["jobs", "skills", "applications", "applications.job"]
     });
-    
+
     const filteredUsers = users.map(user => {
 
         const { jobs, password, skills, applications, ...rest } = user;
@@ -70,4 +73,41 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
     }
 
     return res.status(200).json(filteredUser);
+}
+
+export const addSkill = async (req: Request, res: Response, next: NextFunction) => {
+
+    const { skillId, userId } = req.body;
+
+    const user: User | null = await userRepository.findOne({
+        where: {
+            id: userId
+        },
+        relations: ["skills"]
+    });
+
+    if (!user) {
+        throw new NotFoundError('User not found');
+    }
+
+    if (user.type !== UserTypeEnum.CANDIDATE) {
+        throw new BadRequestError('User not allowed for this operation');
+    }
+
+    const skill: Skill | null = await skillRepository.findOne({
+        where: {
+            id: skillId
+        }
+    });
+
+    if (!skill) {
+        throw new NotFoundError('Skill not found');
+    }
+
+    user.skills.push(skill);
+
+    await userRepository.save(user);
+
+    res.status(200).json({message: 'success'});
+
 }
