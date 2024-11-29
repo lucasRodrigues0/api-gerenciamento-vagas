@@ -125,7 +125,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     if (!job) {
         throw new NotFoundError('Job Not found');
     }
-
+    //otimizar isso aqui
     if (job.applications.filter(name => name.user.name === user.name).length > 0) {
         throw new BadRequestError('User already applied for this job');
     }
@@ -197,9 +197,38 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
 
     const loggedUser = req.user;
 
+    const { jobId } = req.body;
+
     if(loggedUser.type !== UserTypeEnum.CANDIDATE) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
+
+    const job: Job | null = await jobRepository.findOne({
+        where: {
+            id: jobId
+        },
+        relations: ["applications", "applications.user"]
+    })
+
+    if(!job) {
+        throw new NotFoundError('Job not found');
+    }
+
+    //otimizar isso aqui
+    const jobToRemove = job.applications.filter(job => job.user.id === loggedUser.id)[0];
+
+    const test = job.applications.forEach(item => {
+        if(JSON.stringify(item) === JSON.stringify(jobToRemove)) {
+            job.applications.splice(job.applications.indexOf(item), 1);
+            return;
+        }
+    })
+
+    //aqui não é um save, e sim um update, mas update ta dando erro
+    // await jobRepository.update(jobId, job);
+
+    res.status(200).json(test);
+
 }
 
 // export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {

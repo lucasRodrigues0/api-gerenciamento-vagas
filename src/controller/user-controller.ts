@@ -113,7 +113,7 @@ export const addSkill = async (req: Request, res: Response, next: NextFunction) 
 
     user.skills.push(skill);
 
-    await userRepository.save(user);
+    await userRepository.update(user.id, user);
 
     res.status(200).json({message: 'success'});
 
