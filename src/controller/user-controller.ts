@@ -49,7 +49,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
     const user = await userRepository.findOne({
         where: {
             id: Number(userId)
-        }, relations: ['applications', 'jobs', 'skills']
+        }, relations: ['applications', 'applications.job', 'jobs', 'skills']
     });
 
     if (!user) {

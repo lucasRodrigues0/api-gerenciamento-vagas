@@ -52,6 +52,8 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
 
 export const getJobs = async (req: Request, res: Response, next: NextFunction) => {
 
+    const loggedUser = req.user;
+
     const jobs: Job[] = await jobRepository.find({
         relations: ["openBy", "applications", "applications.user"]
     });
@@ -74,7 +76,7 @@ export const getJobs = async (req: Request, res: Response, next: NextFunction) =
             email: openBy.email
         };
 
-        return { ...rest, responsible, _applications };
+        return loggedUser.type === UserTypeEnum.CANDIDATE ? { ...rest, responsible} : { ...rest, responsible, _applications };
     })
 
     res.status(200).json(filteredJobs);
@@ -152,3 +154,17 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     res.status(200).json(response);
 
 }
+
+// export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {
+    
+//     const loggedUser = req.user;
+
+//     const { jobId } = req.body;
+
+//     if(loggedUser.type !== UserTypeEnum.ADMIN) {
+//         throw new BadRequestError('User not allowed for this operation');
+//     }
+
+//     await jobRepository.delete()
+
+// }
