@@ -20,6 +20,10 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     const loggedUser = req.user;
 
     const { title, description, salary, location, model } = req.body;
+    
+    if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
 
     const user: User | null = await userRepository.findOne({
         where: {
@@ -29,10 +33,6 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
 
     if (!user) {
         throw new NotFoundError('User Not found');
-    }
-
-    if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
-        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job = new Job();
@@ -45,8 +45,8 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.openBy = user;
 
     await jobRepository.save(job);
-//refatorar o objeto openBy para resposta
-    res.status(201).json({ ...job });
+
+    res.status(201).json({ message: 'success' });
 
 }
 
@@ -102,6 +102,10 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
 
     const { jobId } = req.body;
 
+    if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
+
     const user: User | null = await userRepository.findOne({
         where: {
             id: loggedUser.id
@@ -110,10 +114,6 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
 
     if (!user) {
         throw new NotFoundError('User Not found');
-    }
-
-    if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
-        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job: Job | null = await jobRepository.findOne({
@@ -185,7 +185,7 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
     job.salary = salary;
     job.location = location;
 
-    await jobRepository.save(job);
+    await jobRepository.update(id, job);
 
     res.status(200).json({
         message: 'success'
