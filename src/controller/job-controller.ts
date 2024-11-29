@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Job } from "../entity/Job";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-import { BadRequestError, NotFoundError } from "../error/api-errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../error/api-errors";
 import { jobRepository } from "../repository/jobRepository";
 import { Phase } from "../entity/enum/Phase";
 import { userRepository } from "../repository/userRepository";
@@ -152,6 +152,44 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     await applicationRepository.save(application);
 
     res.status(200).json(response);
+
+}
+
+export const updateJob = async (req: Request, res: Response, next: NextFunction) => {
+
+    const loggedUser = req.user;
+
+    const { id, title, description, model, salary, location } = req.body;
+
+    if(!loggedUser) {
+        throw new UnauthorizedError('Unauthorized');
+    }
+
+    if(loggedUser.type !== UserTypeEnum.ADMIN && loggedUser.type !== UserTypeEnum.RECRUITER) {
+        throw new BadRequestError('User not allowed for this operation');
+    }
+
+    const job: Job | null = await jobRepository.findOne({
+        where: {
+            id: id
+        }
+    });
+
+    if(!job) {
+        throw new NotFoundError('Job not found');
+    }
+
+    job.title = title;
+    job.description = description;
+    job.model = model;
+    job.salary = salary;
+    job.location = location;
+
+    await jobRepository.save(job);
+
+    res.status(200).json({
+        message: 'success'
+    })
 
 }
 

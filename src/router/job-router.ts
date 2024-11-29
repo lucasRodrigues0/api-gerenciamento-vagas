@@ -1,5 +1,5 @@
 import express from 'express';
-import { apply, createJob, getJobs, searchJobs } from '../controller/job-controller';
+import { apply, createJob, getJobs, searchJobs, updateJob } from '../controller/job-controller';
 import { AuthMiddleware } from '../middleware/auth-middleware';
 
 export const jobRouter = express.Router();
@@ -13,3 +13,5 @@ jobRouter.get('/all', getJobs);
 jobRouter.get('/:title', searchJobs);
 //documentar no swagger
 jobRouter.post('/apply', apply);
+//documentar no swagger
+jobRouter.put('/edit', updateJob);
