@@ -3,7 +3,7 @@ import { skillRepository } from "../repository/skillRepository";
 import { Skill } from "../entity/Skill";
 import { userRepository } from "../repository/userRepository";
 import { User } from "../entity/User";
-import { BadRequestError, NotFoundError } from "../error/api-errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../error/api-errors";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
 
 
@@ -12,6 +12,11 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
     const loggedUser = req.user;
 
     const { name } = req.body;
+        
+    if(loggedUser.type !== UserTypeEnum.ADMIN) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
+    
 
     const user: User | null = await userRepository.findOne({
         where: {
@@ -28,11 +33,7 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
     if(!user) {
         throw new NotFoundError('User not found');
     }
-    
-    if(loggedUser.type !== UserTypeEnum.ADMIN) {
-        throw new BadRequestError('User not allowed for this operation');
-    }
-    
+
     if(skillAlreadyExists) {
         throw new BadRequestError('Skill already registered');
     }

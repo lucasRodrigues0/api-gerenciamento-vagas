@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { userRepository } from "../repository/userRepository";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-import { BadRequestError, NotFoundError } from "../error/api-errors";
+import { NotFoundError, UnauthorizedError } from "../error/api-errors";
 import { User } from "../entity/User";
 import { skillRepository } from "../repository/skillRepository";
 import { Skill } from "../entity/Skill";
@@ -11,7 +11,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
     const loggedUser = req.user;
 
     if(loggedUser.type !== UserTypeEnum.ADMIN) {
-        throw new BadRequestError('User not allowed for this operation');
+        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const users: User[] = await userRepository.find({
@@ -98,7 +98,7 @@ export const addSkill = async (req: Request, res: Response, next: NextFunction) 
     }
 
     if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
-        throw new BadRequestError('User not allowed for this operation');
+        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const skill: Skill | null = await skillRepository.findOne({

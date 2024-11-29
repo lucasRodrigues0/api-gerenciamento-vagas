@@ -32,7 +32,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     }
 
     if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
-        throw new BadRequestError('User not allowed for this operation');
+        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job = new Job();
@@ -113,7 +113,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
-        throw new BadRequestError('User not allowed for this operation');
+        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job: Job | null = await jobRepository.findOne({
@@ -166,7 +166,7 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
     }
 
     if(loggedUser.type !== UserTypeEnum.ADMIN && loggedUser.type !== UserTypeEnum.RECRUITER) {
-        throw new BadRequestError('User not allowed for this operation');
+        throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job: Job | null = await jobRepository.findOne({
@@ -193,6 +193,15 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
 
 }
 
+export const abandonApplication = async (req: Request, res: Response, next: NextFunction) => {
+
+    const loggedUser = req.user;
+
+    if(loggedUser.type !== UserTypeEnum.CANDIDATE) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
+}
+
 // export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {
     
 //     const loggedUser = req.user;
@@ -200,7 +209,7 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
 //     const { jobId } = req.body;
 
 //     if(loggedUser.type !== UserTypeEnum.ADMIN) {
-//         throw new BadRequestError('User not allowed for this operation');
+//         throw UnauthorizedError BadRequestError('User not allowed for this operation');
 //     }
 
 //     await jobRepository.delete()
