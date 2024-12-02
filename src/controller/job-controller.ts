@@ -20,7 +20,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     const loggedUser = req.user;
 
     const { title, description, salary, location, model } = req.body;
-    
+
     if (loggedUser.type !== UserTypeEnum.RECRUITER && loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
@@ -76,7 +76,7 @@ export const getJobs = async (req: Request, res: Response, next: NextFunction) =
             email: openBy.email
         };
 
-        return loggedUser.type === UserTypeEnum.CANDIDATE ? { ...rest, responsible} : { ...rest, responsible, _applications };
+        return loggedUser.type === UserTypeEnum.CANDIDATE ? { ...rest, responsible } : { ...rest, responsible, _applications };
     })
 
     res.status(200).json(filteredJobs);
@@ -161,11 +161,11 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
 
     const { id, title, description, model, salary, location } = req.body;
 
-    if(!loggedUser) {
+    if (!loggedUser) {
         throw new UnauthorizedError('Unauthorized');
     }
 
-    if(loggedUser.type !== UserTypeEnum.ADMIN && loggedUser.type !== UserTypeEnum.RECRUITER) {
+    if (loggedUser.type !== UserTypeEnum.ADMIN && loggedUser.type !== UserTypeEnum.RECRUITER) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
 
@@ -175,7 +175,7 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
         }
     });
 
-    if(!job) {
+    if (!job) {
         throw new NotFoundError('Job not found');
     }
 
@@ -199,18 +199,17 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
 
     const { jobId } = req.body;
 
-    if(loggedUser.type !== UserTypeEnum.CANDIDATE) {
+    if (loggedUser.type !== UserTypeEnum.CANDIDATE) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
 
     const job: Job | null = await jobRepository.findOne({
         where: {
             id: jobId
-        },
-        relations: ["applications", "applications.user"]
+        }
     })
 
-    if(!job) {
+    if (!job) {
         throw new NotFoundError('Job not found');
     }
 
@@ -221,56 +220,42 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
         }
     })
 
-    if(!application) {
+    if (!application) {
         throw new NotFoundError('application not found');
     }
 
     await applicationRepository.delete(application.id);
 
-    // const jobToRemove = job.applications.filter(job => job.user.id === loggedUser.id)[0];
-
-    // const newApplications: Application[] = [];
-
-    // job.applications.forEach(item => {
-    //     if(JSON.stringify(item) === JSON.stringify(jobToRemove)) {
-    //         newApplications.push(...job.applications.splice(job.applications.indexOf(item), 1));
-    //         return;
-    //     }
-    // })
-
-    // await jobRepository.save(job);
-
-    res.status(200).json({message: 'success'});
+    res.status(200).json({ message: 'success' });
 
 }
 
 export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {
-    
+
     const loggedUser = req.user;
 
     const { jobId } = req.body;
 
-    if(loggedUser.type !== UserTypeEnum.ADMIN) {
+    if (loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
-    
+
     const job: Job | null = await jobRepository.findOne({
         where: {
             id: jobId
         }
     });
 
-    
-    if(!job) {
+    if (!job) {
         throw new NotFoundError('Job not found');
     }
-    
-    if(job.applications.length > 0) {
+
+    if (job.applications.length > 0) {
         throw new BadRequestError('Cannot delete a job once there are candidates applying');
     }
 
     // await jobRepository.delete(jobId);
 
-    res.status(200).json({message: 'success'});
+    res.status(200).json({ message: 'success' });
 
 }
