@@ -214,33 +214,63 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
         throw new NotFoundError('Job not found');
     }
 
-    const jobToRemove = job.applications.filter(job => job.user.id === loggedUser.id)[0];
-
-    const newApplications: Application[] = [];
-
-    job.applications.forEach(item => {
-        if(JSON.stringify(item) === JSON.stringify(jobToRemove)) {
-            newApplications.push(...job.applications.splice(job.applications.indexOf(item), 1));
-            return;
+    const application: Application | null = await applicationRepository.findOne({
+        where: {
+            job: job,
+            user: loggedUser
         }
     })
 
-    await jobRepository.save(job);
+    if(!application) {
+        throw new NotFoundError('application not found');
+    }
+
+    await applicationRepository.delete(application.id);
+
+    // const jobToRemove = job.applications.filter(job => job.user.id === loggedUser.id)[0];
+
+    // const newApplications: Application[] = [];
+
+    // job.applications.forEach(item => {
+    //     if(JSON.stringify(item) === JSON.stringify(jobToRemove)) {
+    //         newApplications.push(...job.applications.splice(job.applications.indexOf(item), 1));
+    //         return;
+    //     }
+    // })
+
+    // await jobRepository.save(job);
 
     res.status(200).json({message: 'success'});
 
 }
 
-// export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteJob = async (req: Request, res: Response, next: NextFunction) => {
     
-//     const loggedUser = req.user;
+    const loggedUser = req.user;
 
-//     const { jobId } = req.body;
+    const { jobId } = req.body;
 
-//     if(loggedUser.type !== UserTypeEnum.ADMIN) {
-//         throw UnauthorizedError BadRequestError('User not allowed for this operation');
-//     }
+    if(loggedUser.type !== UserTypeEnum.ADMIN) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
+    
+    const job: Job | null = await jobRepository.findOne({
+        where: {
+            id: jobId
+        }
+    });
 
-//     await jobRepository.delete()
+    
+    if(!job) {
+        throw new NotFoundError('Job not found');
+    }
+    
+    if(job.applications.length > 0) {
+        throw new BadRequestError('Cannot delete a job once there are candidates applying');
+    }
 
-// }
+    // await jobRepository.delete(jobId);
+
+    res.status(200).json({message: 'success'});
+
+}
