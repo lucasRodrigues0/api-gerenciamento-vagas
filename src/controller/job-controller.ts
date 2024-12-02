@@ -125,7 +125,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     if (!job) {
         throw new NotFoundError('Job Not found');
     }
-    //otimizar isso aqui
+
     if (job.applications.filter(name => name.user.name === user.name).length > 0) {
         throw new BadRequestError('User already applied for this job');
     }
@@ -216,8 +216,6 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
 
     const jobToRemove = job.applications.filter(job => job.user.id === loggedUser.id)[0];
 
-    //testar isso aqui
-
     const newApplications: Application[] = [];
 
     job.applications.forEach(item => {
@@ -227,11 +225,9 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
         }
     })
 
-    //aqui não é um save, e sim um update, mas update ta dando erro
-    // await jobRepository.update(jobId, {applications: newApplications});
     await jobRepository.save(job);
 
-    res.status(200).json({message: 'ok'});
+    res.status(200).json({message: 'success'});
 
 }
 
