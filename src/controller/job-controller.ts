@@ -193,6 +193,34 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
 
 }
 
+export const changePhase = async (req: Request, res: Response, next: NextFunction) => {
+
+    const loggedUser = req.user;
+
+    const { jobId, phase } = req.body;
+
+    if(loggedUser.type !== UserTypeEnum.RECRUITER) {
+        throw new UnauthorizedError('User not allowed for this operation');
+    }
+
+    const job: Job | null = await jobRepository.findOne({
+        where: {
+            id: jobId
+        }
+    });
+
+    if(!job) {
+        throw new NotFoundError('Job not found');
+    }
+
+    job.phase = phase;
+
+    await jobRepository.update(jobId, job);
+
+    res.status(200).json({message: 'success'});
+
+}
+
 export const abandonApplication = async (req: Request, res: Response, next: NextFunction) => {
 
     const loggedUser = req.user;
