@@ -243,7 +243,7 @@ export const deleteJob = async (req: Request, res: Response, next: NextFunction)
     const job: Job | null = await jobRepository.findOne({
         where: {
             id: jobId
-        }
+        }, relations: ["applications"]
     });
 
     if (!job) {
@@ -254,7 +254,7 @@ export const deleteJob = async (req: Request, res: Response, next: NextFunction)
         throw new BadRequestError('Cannot delete a job once there are candidates applying');
     }
 
-    // await jobRepository.delete(jobId);
+    await jobRepository.delete(jobId);
 
     res.status(200).json({ message: 'success' });
 
