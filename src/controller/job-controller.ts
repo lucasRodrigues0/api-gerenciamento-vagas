@@ -130,6 +130,10 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
         throw new BadRequestError('User already applied for this job');
     }
 
+    if(job.phase !== Phase.OPEN) {
+        throw new BadRequestError('No longer possible to apply to this job');
+    }
+
     const application = new Application();
 
     application.user = user;
