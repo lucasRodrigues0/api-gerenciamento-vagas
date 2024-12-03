@@ -27,9 +27,9 @@ export class Job {
     salary: string;
     @Column()
     location: string;
-    @Column({name: "openingdate"})
+    @Column({name: "openingdate", type: "timestamptz", default: () => "CURRENT_TIMESTAMP"})
     openingDate: Date;
-    @Column({name: "closingdate"})
+    @Column({name: "closingdate", type: "timestamptz"})
     closingDate: Date;
     @ManyToOne(() => User, (user) => user.jobs, {eager: false})
     @JoinColumn({ name: "open_by" })

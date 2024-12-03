@@ -12,6 +12,6 @@ export class Application {
     @ManyToOne(() => Job, (job) => job.applications)
     @JoinColumn({ name: 'job' })
     job: Job;
-    @Column()
+    @Column({type: "timestamptz", default: () => "CURRENT_TIMESTAMP"})
     date: Date;
 }

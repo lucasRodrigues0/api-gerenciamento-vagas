@@ -41,6 +41,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     job.phase = Phase.OPEN;
     job.model = model;
     job.salary = salary;
+    job.openingDate = new Date();
     job.location = location;
     job.openBy = user;
 
@@ -138,6 +139,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
 
     application.user = user;
     application.job = job;
+    application.date = new Date();
 
     const response = {
         candidate: {
