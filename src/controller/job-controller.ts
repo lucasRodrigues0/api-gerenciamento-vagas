@@ -219,6 +219,10 @@ export const changePhase = async (req: Request, res: Response, next: NextFunctio
         throw new NotFoundError('Job not found');
     }
 
+    if(job.phase === Phase.CLOSED) {
+        throw new BadRequestError('Can\'t reopen a job once it\'s closed');
+    }
+
     job.phase = phase;
 
     if (phase === Phase.CLOSED) {
