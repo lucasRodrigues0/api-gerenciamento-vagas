@@ -36,7 +36,7 @@ export const createJob = async (req: Request, res: Response, next: NextFunction)
     }
 
     const job = new Job();
-    job.title = formatTitle(title);
+    job.title = title.toLowerCase();        
     job.description = description;
     job.phase = Phase.OPEN;
     job.model = model;
@@ -90,9 +90,11 @@ export const searchJobs = async (req: Request, res: Response, next: NextFunction
 
     const list: Job[] = await jobRepository.find({
         where: {
-            title: Like(`%${formatTitle(title)}%`)
+            title: Like(`%${title.toLowerCase()}%`)
         }
     });
+
+    list.forEach(item => item.title = formatTitle(item.title));
 
     res.status(200).json(list);
 }
