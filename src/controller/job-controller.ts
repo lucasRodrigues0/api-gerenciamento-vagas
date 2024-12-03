@@ -221,6 +221,10 @@ export const changePhase = async (req: Request, res: Response, next: NextFunctio
 
     job.phase = phase;
 
+    if (phase === Phase.CLOSED) {
+        job.closingDate = new Date();
+    }
+
     await jobRepository.update(jobId, job);
 
     res.status(200).json({message: 'success'});
