@@ -1,0 +1,115 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Api Gerenciamento de vagas",
+        "version": "1.0.0",
+        "description": "Api criada para gerenciamento e cadastro de vagas de emprego, para fins de estudo."
+    },
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Cadastro de usuários",
+                "description": "Rota responsável por cadastrar usuários",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/types/RegisterBody"
+                            },
+                            "example": {
+                                "name": "Lucas Bot",
+                                "email": "lucas@bot.com",
+                                "password": "1234",
+                                "confPassword": "1234",
+                                "type": "recruiter"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User already exists": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "User already registered"
+                                        }
+                                    },
+                                    "Passwords don't match": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "Passwords don't match"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "types": {
+                "RegisterBody": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "confPassword": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "email",
+                        "password",
+                        "confPassword",
+                        "type"
+                    ]
+                }
+            },
+            "api-responses": {
+                "success": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
