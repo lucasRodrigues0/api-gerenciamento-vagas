@@ -129,7 +129,9 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
         throw new NotFoundError('Job Not found');
     }
 
-    if (job.applications.filter(name => name.user.name === user.name).length > 0) {
+    const alreadyApplied = job.applications.find(application => application.user.name === user.name);
+
+    if(alreadyApplied) {
         throw new BadRequestError('User already applied for this job');
     }
 
