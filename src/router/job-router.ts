@@ -21,4 +21,4 @@ jobRouter.patch('/phase', changePhase);
 //verificar o tipo que essa request deve ser
 jobRouter.post('/abandon', abandonApplication);
 //documentar no swagger
-jobRouter.post('/delete', deleteJob);
+jobRouter.delete('/delete', deleteJob);
