@@ -4,8 +4,8 @@ import { AuthMiddleware } from '../middleware/auth-middleware';
 
 export const userRouter = express.Router();
 
-//documentar no swagger
 userRouter.use(AuthMiddleware);
 userRouter.get('/all', getUsers);
 userRouter.get('/id/:userId', getUser);
+//documentar no swagger
 userRouter.patch('/skill/add', addSkill);

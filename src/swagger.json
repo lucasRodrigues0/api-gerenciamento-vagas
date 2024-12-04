@@ -17,7 +17,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/types/RegisterBody"
+                                "$ref": "#/components/schemas/RegisterBody"
                             },
                             "example": {
                                 "name": "Lucas Bot",
@@ -79,7 +79,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/types/LoginBody"
+                                "$ref": "#/components/schemas/LoginBody"
                             },
                             "example": {
                                 "email": "lucas@bot.com",
@@ -160,11 +160,285 @@
                     }
                 }
             }
-        }
+        },
+        "/api/user/all": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all users",
+                "description": "Retorna uma lista de todos os usuários (função disponível apenas para usuários do tipo ADMIN)",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": [
+                                            {
+                                                "id": 2,
+                                                "name": "Candidate Bot",
+                                                "email": "candidate@bot.com",
+                                                "type": "candidate",
+                                                "_skills": [
+                                                    "CSS",
+                                                    "Javascript",
+                                                    "React",
+                                                    ".NET",
+                                                    "C#",
+                                                    "Spring Boot"
+                                                ],
+                                                "applications": []
+                                            },
+                                            {
+                                                "id": 1,
+                                                "name": "Admin Bot",
+                                                "email": "admin@bot.com",
+                                                "type": "admin"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Recruiter Bot",
+                                                "email": "recruiter@bot.com",
+                                                "type": "recruiter",
+                                                "jobs": [
+                                                    {
+                                                        "id": 6,
+                                                        "title": "mid-level back-end engineer",
+                                                        "description": "vaga pa ra teste",
+                                                        "phase": "open",
+                                                        "model": "remote",
+                                                        "salary": "40k - 65k",
+                                                        "location": "Hybrid",
+                                                        "openingDate": "2024-12-03T17:37:09.088Z",
+                                                        "closingDate": null
+                                                    },
+                                                    {
+                                                        "id": 7,
+                                                        "title": "mid-level front-end engineer",
+                                                        "description": "vaga pa ra teste",
+                                                        "phase": "open",
+                                                        "model": "remote",
+                                                        "salary": "40k - 65k",
+                                                        "location": "Hybrid",
+                                                        "openingDate": "2024-12-03T17:37:15.887Z",
+                                                        "closingDate": null
+                                                    },
+                                                    {
+                                                        "id": 8,
+                                                        "title": "ux-ui designer",
+                                                        "description": "vaga pa ra teste",
+                                                        "phase": "open",
+                                                        "model": "remote",
+                                                        "salary": "40k - 65k",
+                                                        "location": "Hybrid",
+                                                        "openingDate": "2024-12-03T17:37:22.082Z",
+                                                        "closingDate": null
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "User not allowed": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/id/{userId}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user",
+                "description": "Retorna um usuário com base no id passado como parâmetro na URL",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "userId",
+                        "type": "integer",
+                        "required": true,
+                        "description": "User Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "admin": {
+                                        "value": {
+                                            "id": 0,
+                                            "name": "admin",
+                                            "email": "test@email.com",
+                                            "type": "admin"
+                                        }
+                                    },
+                                    "candidate": {
+                                        "value": {
+                                            "id": 0,
+                                            "name": "candidate",
+                                            "email": "candidate@email.com",
+                                            "type": "candidate",
+                                            "_skills": [
+                                                "CSS",
+                                                "Javascript"
+                                            ],
+                                            "applications": []
+                                        }
+                                    },
+                                    "recruiter": {
+                                        "value": {
+                                            "id": 0,
+                                            "name": "recruiter",
+                                            "email": "recruiter@email.com",
+                                            "type": "recruiter",
+                                            "jobs": []
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "User not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/skill/add": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Adicionar habilidade",
+                "description": "Rota responsável por adicionar habilidades a um usuário do tipo candidato",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/addSkillBody"
+                            },
+                            "example": {
+                                "skillId": 0
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "User not found"
+                                        }
+                                    },
+                                    "Skill not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "Skill not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }        
     },
     "components": {
-        "schemas": {
-            "types": {
+            "schemas": {
                 "RegisterBody": {
                     "type": "object",
                     "properties": {
@@ -200,24 +474,24 @@
                         },
                         "password": {
                             "type": "string"
-                        }                 
+                        }
                     },
                     "required": [
-                       "email",
-                       "password"
+                        "email",
+                        "password"
                     ]
-                }
-            },
-            "api-responses": {
-                "success": {
+                },
+                "addSkillBody": {
                     "type": "object",
                     "properties": {
-                        "message": {
-                            "type": "string"
+                        "skillId": {
+                            "type": "integer"
                         }
-                    }
+                    },
+                    "required": [
+                        "skillId"
+                    ]
                 }
             }
         }
-    }
 }
