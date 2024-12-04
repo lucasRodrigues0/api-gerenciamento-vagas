@@ -67,6 +67,99 @@
                     }
                 }
             }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login de usuário",
+                "description": "Rota responsável por efetuar o login do usuário, salvando um cookie httpOnly contendo o token de autenticação",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/types/LoginBody"
+                            },
+                            "example": {
+                                "email": "lucas@bot.com",
+                                "password": "1234"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Wrong password": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "Wrong password!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "User Not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout de usuário",
+                "description": "Rota responsável por efetuar o logout do usuário, eliminando o token salvo nos cookies",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -97,6 +190,21 @@
                         "password",
                         "confPassword",
                         "type"
+                    ]
+                },
+                "LoginBody": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        }                 
+                    },
+                    "required": [
+                       "email",
+                       "password"
                     ]
                 }
             },
