@@ -5,9 +5,7 @@ import { AuthMiddleware } from '../middleware/auth-middleware';
 export const jobRouter = express.Router();
 
 jobRouter.use(AuthMiddleware);
-//documentar no swagger
 jobRouter.post('/create', createJob);
-//documentar no swagger
 jobRouter.get('/all', getJobs);
 //documentar no swagger
 jobRouter.get('/:title', searchJobs);

@@ -435,63 +435,234 @@
                     }
                 }
             }
-        }        
-    },
-    "components": {
-            "schemas": {
-                "RegisterBody": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string"
-                        },
-                        "email": {
-                            "type": "string"
-                        },
-                        "password": {
-                            "type": "string"
-                        },
-                        "confPassword": {
-                            "type": "string"
-                        },
-                        "type": {
-                            "type": "string"
+        },
+        "/api/job/create": {
+            "post": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Criação de vaga",
+                "description": "Rota responsável por inserir uma vaga no banco de dados",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/addJobBody"
+                            },
+                            "example": {
+                                "title": "Job Title",
+                                "description": "Job description",
+                                "model": "remote",
+                                "salary": "40k - 65k",
+                                "location": "City, State",
+                                "userId": 0
+                            }
                         }
-                    },
-                    "required": [
-                        "name",
-                        "email",
-                        "password",
-                        "confPassword",
-                        "type"
-                    ]
+                    }
                 },
-                "LoginBody": {
-                    "type": "object",
-                    "properties": {
-                        "email": {
-                            "type": "string"
-                        },
-                        "password": {
-                            "type": "string"
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
-                    "required": [
-                        "email",
-                        "password"
-                    ]
-                },
-                "addSkillBody": {
-                    "type": "object",
-                    "properties": {
-                        "skillId": {
-                            "type": "integer"
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
-                    "required": [
-                        "skillId"
-                    ]
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "code": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "User Not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/job/all": {
+            "get": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Listar todas as vagas",
+                "description": "Rota responsável por listar todas as vagas. Caso o usuário seja do tipo recrutador ou admin a lista de candidatos inscritos também é apresentada",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "candidate": {
+                                        "value": [
+                                            {
+                                                "id": 8,
+                                                "title": "job1",
+                                                "description": "description",
+                                                "phase": "open",
+                                                "model": "remote",
+                                                "salary": "40k - 65k",
+                                                "location": "Hybrid",
+                                                "openingDate": "2024-12-03T17:37:22.082Z",
+                                                "closingDate": null,
+                                                "responsible": {
+                                                    "name": "Recruiter Bot",
+                                                    "email": "recruiter@bot.com"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "recruiter/admin": {
+                                        "value": [
+                                            {
+                                                "id": 6,
+                                                "title": "job2",
+                                                "description": "description",
+                                                "phase": "open",
+                                                "model": "remote",
+                                                "salary": "40k - 65k",
+                                                "location": "Hybrid",
+                                                "openingDate": "2024-12-03T17:37:09.088Z",
+                                                "closingDate": null,
+                                                "responsible": {
+                                                    "name": "Recruiter Bot",
+                                                    "email": "recruiter@bot.com"
+                                                },
+                                                "_applications": []
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "code": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+    },
+    "components": {
+        "schemas": {
+            "RegisterBody": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "confPassword": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "confPassword",
+                    "type"
+                ]
+            },
+            "LoginBody": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "addSkillBody": {
+                "type": "object",
+                "properties": {
+                    "skillId": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "skillId"
+                ]
+            },
+            "addJobBody": {
+                "type": "object",
+                "properties": {
+                    "title": "string",
+                    "description": "string",
+                    "salary": "string",
+                    "location": "string",
+                    "model": "string",
+                    "userId": "integer"
+                },
+                "required": [
+                    "title",
+                    "description",
+                    "salary",
+                    "location",
+                    "model",
+                    "userId"
+                ]
+            }
+        }
+    }
 }
