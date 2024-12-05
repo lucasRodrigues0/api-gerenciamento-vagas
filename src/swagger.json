@@ -587,6 +587,165 @@
                     }
                 }
             }
+        },
+        "/api/job/{title}": {
+            "get": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Buscar vaga por título",
+                "description": "Rota responsável por buscar vaga por título",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "title",
+                        "type": "string",
+                        "required": true,
+                        "description": "Título da vaga"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": [
+                                            {
+                                                "id": 0,
+                                                "title": "job name",
+                                                "description": "job description",
+                                                "phase": "open",
+                                                "model": "remote",
+                                                "salary": "40k - 65k",
+                                                "location": "Hybrid",
+                                                "openingDate": "2024-12-03T17:37:22.082Z",
+                                                "closingDate": null
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "code": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/job/apply": {
+            "post": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Aplicar para vaga",
+                "description": "Rota responsável por cadastrar candidatos nas vagas abertas",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ApplyBody"
+                            },
+                            "example": {
+                                "jobId": 0
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User already applied": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "User already applied for this job"
+                                        }
+                                    },
+                                    "No longer possible to apply": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "No longer possible to apply to this job"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "User not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "User Not found"
+                                        }
+                                    },
+                                    "job not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "Job Not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -647,12 +806,24 @@
             "addJobBody": {
                 "type": "object",
                 "properties": {
-                    "title": "string",
-                    "description": "string",
-                    "salary": "string",
-                    "location": "string",
-                    "model": "string",
-                    "userId": "integer"
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "salary": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "model": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    }
                 },
                 "required": [
                     "title",
@@ -661,6 +832,17 @@
                     "location",
                     "model",
                     "userId"
+                ]
+            },
+            "ApplyBody": {
+                "type": "object",
+                "properties": {
+                    "jobId": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "jobId"
                 ]
             }
         }

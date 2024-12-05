@@ -161,7 +161,7 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
 
     await applicationRepository.save(application);
 
-    res.status(200).json(response);
+    res.status(200).json({message: "success"});
 
 }
 
