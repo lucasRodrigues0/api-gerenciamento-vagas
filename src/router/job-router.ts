@@ -8,9 +8,7 @@ jobRouter.use(AuthMiddleware);
 jobRouter.post('/create', createJob);
 jobRouter.get('/all', getJobs);
 jobRouter.get('/:title', searchJobs);
-//documentar no swagger
 jobRouter.post('/apply', apply);
-//documentar no swagger
 jobRouter.put('/edit', updateJob);
 //documentar no swagger
 jobRouter.patch('/phase', changePhase);

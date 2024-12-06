@@ -197,9 +197,7 @@ export const updateJob = async (req: Request, res: Response, next: NextFunction)
 
     await jobRepository.update(id, job);
 
-    res.status(200).json({
-        message: 'success'
-    })
+    res.status(204).send();
 
 }
 

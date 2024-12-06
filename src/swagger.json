@@ -634,7 +634,7 @@
                         "content": {
                             "application/json": {
                                 "examples": {
-                                    "code": {
+                                    "Unauthorized": {
                                         "value": {
                                             "status": 401,
                                             "message": "Unauthorized"
@@ -772,29 +772,39 @@
                     }
                 },
                 "responses": {
-                    "000": {
-                        "description": "",
+                    "204": {
+                        "description": "Vaga atualizada"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "examples": {
-                                    "success": {
+                                    "Unauthenticated": {
                                         "value": {
-                                            "message": "success"
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
                                         }
                                     }
                                 }
                             }
                         }
                     },
-                    "statuscode": {
-                        "description": "",
+                    "404": {
+                        "description": "Not found",
                         "content": {
                             "application/json": {
                                 "examples": {
-                                    "code": {
+                                    "Not found": {
                                         "value": {
-                                            "status": 0,
-                                            "message": ""
+                                            "status": 404,
+                                            "message": "Job Not found"
                                         }
                                     }
                                 }
