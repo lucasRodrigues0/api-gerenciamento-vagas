@@ -164,7 +164,7 @@
         "/api/user/all": {
             "get": {
                 "tags": [
-                    "User"
+                    "Admin"
                 ],
                 "summary": "Get all users",
                 "description": "Retorna uma lista de todos os usuários (função disponível apenas para usuários do tipo ADMIN)",
@@ -746,6 +746,63 @@
                     }
                 }
             }
+        },
+        "/api/job/updateJob": {
+            "put": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Atualização de vaga",
+                "description": "Rota responsável por atualizar os detalhes de uma vaga",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateJobBody"
+                            },
+                            "example": {
+                                "id": 1,
+                                "title": "job title",
+                                "description": "Job description",
+                                "model": "hybrid",
+                                "salary": "40k - 65k",
+                                "location": "City, State"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "000": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "message": "success"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "statuscode": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "code": {
+                                        "value": {
+                                            "status": 0,
+                                            "message": ""
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -843,6 +900,37 @@
                 },
                 "required": [
                     "jobId"
+                ]
+            },
+            "updateJobBody": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "salary": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "model": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "title",
+                    "description",
+                    "salary",
+                    "location",
+                    "model"
                 ]
             }
         }
