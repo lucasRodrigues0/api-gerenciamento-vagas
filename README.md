@@ -14,6 +14,8 @@ Neste projeto foi usado Node.JS com Express, Typeorm com postgreSQL para gerenci
 
 ## Informações gerais
 
+A documentação da api está disponível no endpoint /api-docs/#/
+
 Existem 3 tipos de usuários: Admin, Recruiter e Candidate. Cada usuário possui permissões específicas dentro do projeto (Listado abaixo).
 
 ##### Candidate
