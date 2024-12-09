@@ -7,5 +7,4 @@ export const userRouter = express.Router();
 userRouter.use(AuthMiddleware);
 userRouter.get('/all', getUsers);
 userRouter.get('/id/:userId', getUser);
-//documentar no swagger
 userRouter.patch('/skill/add', addSkill);

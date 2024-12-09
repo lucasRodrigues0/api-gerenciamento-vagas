@@ -145,23 +145,9 @@ export const apply = async (req: Request, res: Response, next: NextFunction) => 
     application.job = job;
     application.date = new Date();
 
-    const response = {
-        candidate: {
-            id: user.id,
-            name: user.name,
-            email: user.email
-        },
-        job: {
-            id: job.id,
-            title: job.title,
-            description: job.description,
-        },
-        date: null
-    }
-
     await applicationRepository.save(application);
 
-    res.status(200).json({message: "success"});
+    res.status(204).send();
 
 }
 
@@ -233,7 +219,7 @@ export const changePhase = async (req: Request, res: Response, next: NextFunctio
 
     await jobRepository.update(jobId, job);
 
-    res.status(200).json({message: 'success'});
+    res.status(204).send();
 
 }
 

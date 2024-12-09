@@ -115,6 +115,6 @@ export const addSkill = async (req: Request, res: Response, next: NextFunction) 
 
     await userRepository.save(user);
 
-    res.status(200).json({message: 'success'});
+    res.status(204).send();
 
 }

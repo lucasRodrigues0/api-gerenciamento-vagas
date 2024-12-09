@@ -366,19 +366,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "examples": {
-                                    "success": {
-                                        "value": {
-                                            "message": "success"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Success"
                     },
                     "401": {
                         "description": "Unauthorized",
@@ -656,19 +645,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "examples": {
-                                    "success": {
-                                        "value": {
-                                            "message": "success"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Success"
                     },
                     "400": {
                         "description": "Bad Request",
