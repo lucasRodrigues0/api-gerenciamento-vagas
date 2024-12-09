@@ -33,3 +33,4 @@ Existem 3 tipos de usuários: Admin, Recruiter e Candidate. Cada usuário possui
 - Todas as permissões do recruiter
 - Excluir vaga do banco de dados
 - Visualizar todos os usuários cadastrados
+- Cadastrar habilidade no banco de dados

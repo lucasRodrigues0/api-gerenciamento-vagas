@@ -155,7 +155,7 @@
                 "tags": [
                     "Admin"
                 ],
-                "summary": "Get all users",
+                "summary": "Listar todos os usuários",
                 "description": "Retorna uma lista de todos os usuários (função disponível apenas para usuários do tipo ADMIN)",
                 "responses": {
                     "200": {
@@ -262,7 +262,7 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Get user",
+                "summary": "Exibir usuário com base no Id",
                 "description": "Retorna um usuário com base no id passado como parâmetro na URL",
                 "parameters": [
                     {
@@ -786,7 +786,7 @@
                 "tags": [
                     "Job"
                 ],
-                "summary": "Rota responsável por atualizar a fase de uma vaga",
+                "summary": "Atualizar fase",
                 "description": "Rota responsável por atualizar a fase de uma vaga",
                 "requestBody": {
                     "content": {
