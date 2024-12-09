@@ -16,12 +16,6 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
     if(loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
-    // verificar necessidade disso
-    const user: User | null = await userRepository.findOne({
-        where: {
-            id: loggedUser.id
-        }
-    });
 
     const skillAlreadyExists: Skill | null = await skillRepository.findOne({
         where: {
@@ -29,10 +23,6 @@ export const createSkill = async (req: Request, res: Response, next: NextFunctio
         }
     })
     
-    if(!user) {
-        throw new NotFoundError('User not found');
-    }
-
     if(skillAlreadyExists) {
         throw new BadRequestError('Skill already registered');
     }
