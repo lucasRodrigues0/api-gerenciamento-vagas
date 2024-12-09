@@ -780,6 +780,303 @@
                     }
                 }
             }
+        },
+        "/api/job/phase": {
+            "patch": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Rota responsável por atualizar a fase de uma vaga",
+                "description": "Rota responsável por atualizar a fase de uma vaga",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/changePhaseBody"
+                            },
+                            "example": {
+                                "jobId": 0,
+                                "phase": "ongoing"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Bad Request": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "Can't reopen a job once it's closed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "Job Not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/job/abandon": {
+            "post": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Desistir de candidatura",
+                "description": "Rota responsável por excluir a candidatura de um candidato a determinada vaga",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/abandonApplicationBody"
+                            },
+                            "example": {
+                                "jobId": 0
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "Job not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "Job not found"
+                                        }
+                                    },
+                                    "Application not found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "application not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/job/delete": {
+            "delete": {
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Excluir vaga",
+                "description": "Rota responsável por excluir uma vaga do banco de dados",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/deleteJobBody"
+                            },
+                            "example": {
+                                "jobId": 9
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Bad Request": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "Cannot delete a job once there are candidates applying"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Not Found": {
+                                        "value": {
+                                            "status": 404,
+                                            "message": "Job not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/skill/create": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Cadastrar habilidade",
+                "description": "Rota responsável por cadastrar uma habilidade no banco de dados",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createSkillBody"
+                            },
+                            "example": {
+                                "name": "MongoDB"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "success": {
+                                        "value": {
+                                            "name": "SkillName",
+                                            "id": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Skill Already Registered": {
+                                        "value": {
+                                            "status": 400,
+                                            "message": "Skill already registered"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthenticated": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    },
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "User not allowed for this operation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -908,6 +1205,54 @@
                     "salary",
                     "location",
                     "model"
+                ]
+            },
+            "changePhaseBody": {
+                "type": "object",
+                "properties": {
+                    "jobId": {
+                        "type": "integer"
+                    },
+                    "phase": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "jobId",
+                    "phase"
+                ]
+            },
+            "abandonApplicationBody": {
+                "type": "object",
+                "properties": {
+                    "jobId": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "jobId"
+                ]
+            },
+            "deleteJobBody": {
+                "type": "object",
+                "properties": {
+                    "jobId": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "jobId"
+                ]
+            },
+            "createSkillBody": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
                 ]
             }
         }

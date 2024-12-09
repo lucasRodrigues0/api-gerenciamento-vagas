@@ -10,9 +10,6 @@ jobRouter.get('/all', getJobs);
 jobRouter.get('/:title', searchJobs);
 jobRouter.post('/apply', apply);
 jobRouter.put('/edit', updateJob);
-//documentar no swagger
 jobRouter.patch('/phase', changePhase);
-//documentar no swagger
 jobRouter.post('/abandon', abandonApplication);
-//documentar no swagger
 jobRouter.delete('/delete', deleteJob);
