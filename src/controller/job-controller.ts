@@ -300,6 +300,6 @@ export const deleteJob = async (req: Request, res: Response, next: NextFunction)
 
     await jobRepository.delete(jobId);
 
-    res.status(200).json({ message: 'success' });
+    res.status(204).send();
 
 }

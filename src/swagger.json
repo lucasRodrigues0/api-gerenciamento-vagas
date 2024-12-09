@@ -144,19 +144,8 @@
                 "summary": "Logout de usuário",
                 "description": "Rota responsável por efetuar o logout do usuário, eliminando o token salvo nos cookies",
                 "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "examples": {
-                                    "success": {
-                                        "value": {
-                                            "message": "success"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Success"
                     }
                 }
             }

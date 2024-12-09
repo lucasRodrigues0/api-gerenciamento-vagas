@@ -10,15 +10,17 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     const { name, email, password, confPassword, type } = req.body;
 
-    const existingUser = await userRepository.findOne({ where: {
-        email: email
-    }});
+    const existingUser = await userRepository.findOne({
+        where: {
+            email: email
+        }
+    });
 
-    if(existingUser) {
+    if (existingUser) {
         throw new BadRequestError('User already registered');
     }
 
-    if(password !== confPassword) {
+    if (password !== confPassword) {
         throw new BadRequestError('Passwords don\'t match');
     }
 
@@ -31,31 +33,33 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     userRepository.save(newUser);
 
-    res.status(201).json({message: 'success'});
+    res.status(201).json({ message: 'success' });
 
 }
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    const user: User | null = await userRepository.findOne({where: {
-        email: email
-    }})
+    const user: User | null = await userRepository.findOne({
+        where: {
+            email: email
+        }
+    })
 
-    if(!user) {
+    if (!user) {
         throw new NotFoundError('User Not found');
     }
 
     const verify: boolean = await bcrypt.compare(password, user.password);
 
-    if(!verify) {
+    if (!verify) {
         throw new BadRequestError('Wrong password!');
     }
 
     const token = jwt.sign(
-        {id: user.id},
+        { id: user.id },
         process.env.PRIVATE_KEY ?? '',
-        {expiresIn: '1w'}
+        { expiresIn: '1w' }
     );
 
     res.cookie('token', token, {
@@ -65,7 +69,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         sameSite: 'strict'
     });
 
-    res.status(200).json({message: 'success!'});
+    res.status(200).json({ message: 'success!' });
 }
 
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,5 +80,5 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
         sameSite: 'strict'
     });
 
-    res.status(200).json({message: 'success!'});
+    res.status(204).send();
 }
