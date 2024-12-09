@@ -1,11 +1,8 @@
 import { Request, Response, NextFunction } from "express"
 import { skillRepository } from "../repository/skillRepository";
 import { Skill } from "../entity/Skill";
-import { userRepository } from "../repository/userRepository";
-import { User } from "../entity/User";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../error/api-errors";
+import { BadRequestError, UnauthorizedError } from "../error/api-errors";
 import { UserTypeEnum } from "../entity/enum/UserTypeEnum";
-
 
 export const createSkill = async (req: Request, res: Response, next: NextFunction) => {
 
