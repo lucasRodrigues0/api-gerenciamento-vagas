@@ -270,7 +270,7 @@ export const abandonApplication = async (req: Request, res: Response, next: Next
 
     await applicationRepository.delete(application.id);
 
-    res.status(200).json({ message: 'success' });
+    res.status(204).send();
 
 }
 
