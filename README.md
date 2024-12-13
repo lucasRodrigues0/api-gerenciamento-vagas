@@ -8,11 +8,14 @@ Neste projeto foi usado Node.JS com Express, Typeorm com postgreSQL para gerenci
 
 ## Como rodar o projeto
 
-- Após baixar o projeto, abra o terminal e execute "npm start" para instalar as dependências..
+- Após baixar o projeto, abra o terminal e execute "npm start" para instalar as dependências.
 - Na pasta raiz do projeto crie um arquivo .env e preencha com as variáveis de ambiente do arquivo .env-example.txt e seus respectivos valores.
+- Executar o script disponível no arquivo script.sql diretamente na ferramenta de banco de dados.
 - Após configurar e iniciar o servidor de banco de dados, abra o terminal na pasta raiz do projeto e execute o comando "npm run dev".
 
 ## Informações gerais
+
+A documentação da api está disponível no endpoint /api-docs/#/
 
 Existem 3 tipos de usuários: Admin, Recruiter e Candidate. Cada usuário possui permissões específicas dentro do projeto (Listado abaixo).
 
