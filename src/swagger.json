@@ -930,7 +930,7 @@
         "/api/job/delete": {
             "delete": {
                 "tags": [
-                    "Job"
+                    "Admin"
                 ],
                 "summary": "Excluir vaga",
                 "description": "Rota responsável por excluir uma vaga do banco de dados",
