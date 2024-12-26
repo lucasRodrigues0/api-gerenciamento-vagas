@@ -150,6 +150,35 @@
                 }
             }
         },
+        "/api/auth/checkToken": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "check token",
+                "description": "Rota responsável por verificar se existe um token JWT salvo nos cookies",
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "Unauthorized": {
+                                        "value": {
+                                            "status": 401,
+                                            "message": "Unauthorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/all": {
             "get": {
                 "tags": [

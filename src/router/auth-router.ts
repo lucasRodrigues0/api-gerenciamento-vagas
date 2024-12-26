@@ -7,5 +7,4 @@ export const authRouter = express.Router();
 authRouter.post('/register', register);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);
-//atualizar no swagger
 authRouter.get('/checkToken', AuthMiddleware, checkToken);
