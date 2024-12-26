@@ -82,3 +82,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
 
     res.status(204).send();
 }
+
+export const checkToken = async (req: Request, res: Response, next: NextFunction) => {
+    res.status(204).send();
+}
