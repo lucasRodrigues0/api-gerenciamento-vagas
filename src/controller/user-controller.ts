@@ -132,5 +132,19 @@ export const loadUser = async (req: Request, res: Response, next: NextFunction) 
         throw new NotFoundError('user not found');
     }
 
-    res.status(200).json(user);
+    const {applications, skills, jobs, password, ...rest} = user;
+
+    let response = {};
+
+    if(user.type === UserTypeEnum.ADMIN) {
+        response = {...rest}
+    }
+    if(user.type === UserTypeEnum.CANDIDATE) {
+        response = {...rest, applications, skills};
+    }
+    if(user.type === UserTypeEnum.RECRUITER) {
+        response = {...rest, jobs};
+    }
+
+    res.status(200).json(response);
 }
