@@ -10,7 +10,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 
     const loggedUser = req.user;
 
-    if(loggedUser.type !== UserTypeEnum.ADMIN) {
+    if (loggedUser.type !== UserTypeEnum.ADMIN) {
         throw new UnauthorizedError('User not allowed for this operation');
     }
 
@@ -117,4 +117,20 @@ export const addSkill = async (req: Request, res: Response, next: NextFunction) 
 
     res.status(204).send();
 
+}
+
+export const loadUser = async (req: Request, res: Response, next: NextFunction) => {
+    const loggedUser = req.user;
+
+    const user: User | null = await userRepository.findOne({
+        where: {
+            id: loggedUser.id
+        }, relations: ['applications', 'applications.job', 'jobs', 'skills']
+    })
+
+    if(!user) {
+        throw new NotFoundError('user not found');
+    }
+
+    res.status(200).json(user);
 }
