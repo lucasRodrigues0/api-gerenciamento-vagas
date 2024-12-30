@@ -9,23 +9,25 @@ export class Job {
 
     @PrimaryGeneratedColumn()
     id: number;
-    @Column()
+    @Column({nullable: false})
     title: string;
-    @Column()
+    @Column({nullable: false})
     description: string;
     @Column({
         type: "enum",
-        enum: Phase
+        enum: Phase,
+        nullable: false
     })
     phase: Phase; //enum phase
     @Column({
         type: "enum",
-        enum: Model
+        enum: Model,
+        nullable: false
     })
     model: Model;
-    @Column()
+    @Column({nullable: false})
     salary: string;
-    @Column()
+    @Column({nullable: false})
     location: string;
     @Column({name: "openingdate", type: "timestamptz", default: () => "CURRENT_TIMESTAMP"})
     openingDate: Date;
