@@ -26,6 +26,11 @@ export class User {
     })
     type: UserTypeEnum;
 
+    @Column({
+        nullable: true
+    })
+    refreshToken: string
+
     @OneToMany(() => Job, (job) => job.openBy)
     jobs: Job[];
 

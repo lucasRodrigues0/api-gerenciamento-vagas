@@ -59,17 +59,28 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const token = jwt.sign(
         { id: user.id },
         process.env.PRIVATE_KEY ?? '',
-        { expiresIn: '1w' }
+        { expiresIn: '1h' }
     );
 
-    res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 4 * 60 * 60 * 1000,
-        sameSite: 'strict'
-    });
+    const refreshToken = jwt.sign(
+        {id: user.id},
+        process.env.PRIVATE_REFRESH_KEY ?? '',
+        {expiresIn: '1w'}
+    )
 
-    res.status(200).json({ message: 'success!' });
+    // res.cookie('token', token, {
+    //     httpOnly: true,
+    //     secure: process.env.NODE_ENV === "production",
+    //     maxAge: 4 * 60 * 60 * 1000,
+    //     sameSite: 'strict'
+    // });
+
+    console.log('cheguei aqui');
+
+    res.status(200).json({ 
+        access: token,
+        refresh: refreshToken
+     });
 }
 
 export const logout = async (req: Request, res: Response, next: NextFunction) => {
